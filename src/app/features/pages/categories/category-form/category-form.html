@@ -1,1 +1,35 @@
-<p>category-form works!</p>
+<div class="form-container">
+  <header>
+    <h1>{{isEditMode ? 'Edit' : 'Create'}} Category</h1>
+  </header>
+
+  @if (loading) {
+    <p class="loading-text">{{ isEditMode ? 'Updating category...' : 'Saving category...' }}</p>
+  }
+
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    <div class="field">
+      <label for="category-name" class="label">Category Name</label>
+      <input
+        type="text"
+        class="input input-category-name"
+        id="category-name"
+        placeholder="Ej: Desayuno"
+        formControlName="name"
+      />
+    </div>
+    <div class="field">
+      <label for="category-description" class="label">Description</label>
+      <textarea
+        class="textarea input-category-description"
+        id="category-description"
+        placeholder="Escriba una breve descripcion de la categoria"
+        formControlName="description"
+      ></textarea>
+    </div>
+    <button type="submit" class="button is-primary" [disabled]="categoryForm.invalid || loading">
+      {{ isEditMode ? 'Update' : 'Save' }}
+    </button>
+    <button type="button" (click)="onReset()" class="button is-secondary">Cancel</button>
+  </form>
+</div>

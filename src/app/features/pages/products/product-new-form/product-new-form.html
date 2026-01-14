@@ -1,1 +1,100 @@
-<p>product-new-form works!</p>
+<form
+  class="form"
+  [formGroup]="formData"
+  (ngSubmit)="onSubmit()"
+>
+  <h1>Register Product</h1>
+  <div class="field">
+    <label for="product-name" class="label">Product Name</label>
+    <input
+      type="text"
+      class="input input-product-name"
+      id="product-name"
+      placeholder="Ej: Pasta al ajillo"
+      formControlName="name"
+    />
+  </div>
+  <div class="field">
+    <label for="product-stock" class="label">Stock</label>
+    <input
+      type="number"
+      class="input input-product-stock"
+      id="product-stock"
+      placeholder="Ej: 12"
+      formControlName="stock"
+    />
+  </div>
+  <div class="field">
+    <label for="product-description" class="label">Description</label>
+    <textarea
+      class="textarea input-product-description"
+      id="product-description"
+      placeholder="Escriba una breve descripcion del plato"
+      formControlName="description"
+    ></textarea>
+  </div>
+  <div class="field">
+    <label for="product-category" class="label">Category</label>
+    <select formControlName="category" id="product-category" class="input input-product-category">
+      <option value="">Seleccione...</option>
+      <!-- TODO: Populate options dynamically from backend -->
+      <option value="breakfast">Breakfast</option>
+      <option value="lunch">Lunch</option>
+      <option value="dinner">Dinner</option>
+      <option value="dessert">Dessert</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="product-type" class="label">Type</label>
+    <select formControlName="type" id="product-type" class="input input-product-type">
+      <option value="">Seleccione...</option>
+      TODO: Populate options dynamically from backend
+      <option value="dish">Dish</option>
+      <option value="ingredient">Ingredient</option>
+      <option value="addon">Addon</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="price-product" class="label">Price</label>
+    <input
+      type="number"
+      class="input input-product-price"
+      id="price-product"
+      placeholder="Ej: $10.00"
+      formControlName="price"
+    />
+  </div>
+  <div class="field">
+    <label for="product-image" class="label">Image</label>
+    <input
+      type="text"
+      class="input input-product-image"
+      id="product-image"
+      formControlName="image_url"
+      placeholder="Ej: https://www.example.com/image.jpg"
+    />
+  </div>
+  <div class="field">
+    <label for="product-status" class="label">Status</label>
+    <div class="option-status">
+      <input
+        type="radio"
+        class="input-product-status input-product-status--active"
+        id="product-status-active"
+        formControlName="status"
+      />
+      <label for="product-status-active" class="product-state-active">Active</label>
+      <input
+        type="radio"
+        class="input-product-status input-product-status--notactive"
+        id="product-status-notactive"
+        formControlName="status"
+      />
+      <label for="product-status-notactive" class="product-state-active">Not Active</label>
+    </div>
+  </div>
+  <div class="field field--buttons">
+    <button type="submit">Register Product</button>
+    <button type="reset">Reset Form</button>
+  </div>
+</form>

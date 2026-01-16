@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpCategory } from '../../../../core/services/http-category';
 import { LowerCasePipe } from '@angular/common';
+import { HttpProduct } from '../../../../core/services/http-product';
 
 @Component({
   selector: 'app-product-new-form',
@@ -17,7 +18,10 @@ export class ProductNewForm {
   // Atributo para almacenar los datos del formulario
   public formData!: FormGroup;
 
-  constructor( private httpCategory: HttpCategory ) {
+  constructor(
+    private httpCategory: HttpCategory,
+    private httpProduct: HttpProduct
+  ) {
     // Definido el formulario
     this.formData = new FormGroup({
       name: new FormControl(''),
@@ -27,19 +31,24 @@ export class ProductNewForm {
       price: new FormControl(0),
       image_url: new FormControl(''),
       stock: new FormControl(0),
-      status: new FormControl(''),
+      status: new FormControl('active'),
     });
   }
 
   onSubmit() {
     // Lógica para manejar el envío del formulario
-    console.log(this.formData.value);
+    // console.log(this.formData.value);
+    // TODO: Cambiar el Callback por el objeto Observable
+    this.httpProduct.createProduct(this.formData.value).subscribe( (response) => {
+      console.log('Producto creado:', response);
+    });
   }
 
   // Life Cicle Hooks
   ngOnInit(): void {
     // Lógica a ejecutar al inicializar el componente, solicita de datos, etc.
     // console.log('ngOnInit');
+    // TODO: Cambiar el Callback por el objeto Observable
     this.httpCategory.getAllCategories().subscribe( (data: any) => {
       console.log(data.categories);
       this.categories = data.categories;

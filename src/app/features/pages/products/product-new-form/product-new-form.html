@@ -1,3 +1,7 @@
+<!-- <pre>
+  {{ categories | json  }}
+</pre> -->
+
 <form
   class="form"
   [formGroup]="formData"
@@ -38,10 +42,9 @@
     <select formControlName="category" id="product-category" class="input input-product-category">
       <option value="">Seleccione...</option>
       <!-- TODO: Populate options dynamically from backend -->
-      <option value="breakfast">Breakfast</option>
-      <option value="lunch">Lunch</option>
-      <option value="dinner">Dinner</option>
-      <option value="dessert">Dessert</option>
+      @for (category of categories; track $index) {
+        <option [value]="category._id">{{ category.name }}</option>
+      }
     </select>
   </div>
   <div class="field">
@@ -49,9 +52,9 @@
     <select formControlName="type" id="product-type" class="input input-product-type">
       <option value="">Seleccione...</option>
       TODO: Populate options dynamically from backend
-      <option value="dish">Dish</option>
-      <option value="ingredient">Ingredient</option>
-      <option value="addon">Addon</option>
+      @for (type of types; track $index) {
+        <option [value]="type | lowercase">{{ type }}</option>
+      }
     </select>
   </div>
   <div class="field">

@@ -1,18 +1,21 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { HttpCategory } from '../../../../core/services/http-category';
+import { LowerCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-product-new-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, LowerCasePipe],
   templateUrl: './product-new-form.html',
   styleUrl: './product-new-form.css',
 })
 export class ProductNewForm {
   edad: number = 0;   // Inferencia
+  categories: any[] = [];
+  types: string[] = ['Dish', 'Ingredient', 'Addon'];
 
   // Atributo para almacenar los datos del formulario
-  formData!: FormGroup;
+  public formData!: FormGroup;
 
   constructor( private httpCategory: HttpCategory ) {
     // Definido el formulario
@@ -37,8 +40,9 @@ export class ProductNewForm {
   ngOnInit(): void {
     // Lógica a ejecutar al inicializar el componente, solicita de datos, etc.
     // console.log('ngOnInit');
-    this.httpCategory.getAllCategories().subscribe( data => {
-      console.log(data);
+    this.httpCategory.getAllCategories().subscribe( (data: any) => {
+      console.log(data.categories);
+      this.categories = data.categories;
     });
   }
   ngOnChanges(): void {

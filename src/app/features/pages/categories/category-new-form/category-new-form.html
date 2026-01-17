@@ -1,0 +1,21 @@
+<form [formGroup]="formCategory" (ngSubmit)="onSumit()">
+
+  <h1>Register Category</h1>
+  <!-- Define la estructura de campos del formulario para registrar una nueva categoría. -->
+  <div class="field">
+    <label for="category-name">Category Name</label>
+    <input type="text" placeholder="Ej: Drinks" id="category-name" formControlName="name" />
+  </div>
+  <div class="field">
+    <label for="category-description">Description</label>
+    <textarea formControlName="description" id="category-description" placeholder="Ej: Description about drink"></textarea>
+  </div>
+  <div class="field buttons">
+    <button type="submit">Save</button>
+    <button type="reset">Cancel</button>
+  </div>
+
+</form>
+
+
+

@@ -1,1 +1,49 @@
-<p>user-new-form works!</p>
+<form
+  [formGroup]="formData"
+  (ngSubmit)="onSubmit()
+">
+  <h1>Register User</h1>
+
+  <div class="field">
+    <label for="name">Name</label>
+    <input type="text" id="name" formControlName="name" />
+  </div>
+  <div class="field">
+    <label for="username">Username</label>
+    <input type="text" id="username" formControlName="username" />
+  </div>
+  <div class="field">
+    <label for="email">Email</label>
+    <input type="email" id="email" formControlName="email" />
+  </div>
+  <div class="field">
+    <label for="password">Password</label>
+    <input type="password" id="password" formControlName="password" />
+  </div>
+  <!-- TODO: Confirm password validation -->
+  <div class="field">
+    <label for="confirm-password">Confirm Password</label>
+    <input type="password" id="confirm-password" name="confirmPassword" />
+  </div>
+  <div class="field">
+    <label for="role">Role</label>
+    <select id="role" formControlName="role">
+      <option value="admin">Admin</option>
+      <option value="colaborator">Colaborator</option>
+      <option value="registered">Registered</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="status">Status</label>
+
+    <input type="radio" id="active" formControlName="isActive" [value]="true" />
+    <label for="active">Active</label>
+    <input type="radio" id="inactive" formControlName="isActive" [value]="false" />
+    <label for="inactive">Inactive</label>
+  </div>
+  <div class="field buttons">
+    <button type="submit">Register</button>
+    <button type="reset">Clear</button>
+  </div>
+
+</form>

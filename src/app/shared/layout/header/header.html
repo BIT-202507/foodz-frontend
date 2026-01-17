@@ -1,1 +1,5 @@
-<p>header works!</p>
+<ul>
+  <li><a routerLink="/dashboard/users">Users</a></li>
+  <li><a routerLink="/dashboard/user/new">User new</a></li>
+  <li><a [routerLink]="['/dashboard', 'user', 'edit', 234242 ]">User edit</a></li>
+</ul>

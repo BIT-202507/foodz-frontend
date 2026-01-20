@@ -24,4 +24,11 @@ form {
     flex-direction: row;
     padding: 1rem;
   }
+
+  .error {
+    color: red;
+    font-size: 0.8rem;
+    height: 1rem;
+  }
+
 }

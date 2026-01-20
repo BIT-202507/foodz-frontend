@@ -1,18 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpCategory } from '../../../../core/services/http-category';
-import { JsonPipe, LowerCasePipe } from '@angular/common';
+// [EDUCATIONAL] Se importa AsyncPipe para manejar Observables directamente en la plantilla.
+// Esto es clave para la estrategia OnPush ya que maneja la suscripción y la detección de cambios automáticamente.
+import { JsonPipe, LowerCasePipe, AsyncPipe } from '@angular/common';
 import { HttpProduct } from '../../../../core/services/http-product';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product-new-form',
-  imports: [ReactiveFormsModule, LowerCasePipe, JsonPipe],
+  imports: [ReactiveFormsModule, LowerCasePipe, JsonPipe, AsyncPipe],
   templateUrl: './product-new-form.html',
   styleUrl: './product-new-form.css',
+  // [EDUCATIONAL] ChangeDetectionStrategy.OnPush:
+  // Le dice a Angular que verifique este componente SOLO cuando:
+  // 1. Las propiedades de entrada (Input) cambian.
+  // 2. Un evento se origina desde este componente o sus hijos.
+  // 3. Un Observable con el AsyncPipe emite un nuevo valor.
+  // Esto es más eficiente que la estrategia por defecto y soluciona nuestro problema de actualización fuera de zona ("zoneless").
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductNewForm {
   edad: number = 0;   // Inferencia
-  categories: any[] = [];
+
+  // [EDUCATIONAL] Cambiado de 'categories: any[]' a 'Observable<any[]>'.
+  // Ahora mantenemos un flujo de datos (Observable) en lugar de los datos en sí.
+  // El '!' indica que será asignado antes de su uso (en ngOnInit).
+  categories!: Observable<any[]>;
+
   types: string[] = ['Dish', 'Ingredient', 'Addon'];
 
   // Atributo para almacenar los datos del formulario
@@ -26,30 +41,30 @@ export class ProductNewForm {
     this.formData = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl(''),
-      category: new FormControl('', [Validators.required] ),
-      type: new FormControl('dish', [Validators.required] ),
-      price: new FormControl(0, [Validators.required, Validators.min(0)] ),
-      image_url: new FormControl('', [Validators.required, Validators.minLength(10)] ),
-      stock: new FormControl(0, [Validators.required, Validators.min(1)] ),
+      category: new FormControl('', [Validators.required]),
+      type: new FormControl('dish', [Validators.required]),
+      price: new FormControl(0, [Validators.required, Validators.min(0)]),
+      image_url: new FormControl('', [Validators.required, Validators.minLength(10)]),
+      stock: new FormControl(0, [Validators.required, Validators.min(1)]),
       status: new FormControl('active'),
     });
   }
 
   onSubmit() {
     // Verifica que el formulario sea válido antes de enviarlo
-    if( this.formData.valid ) {
+    if (this.formData.valid) {
       // Lógica para manejar el envío del formulario
       console.log('Envia estos datos al servicio', this.formData.value);
       // Cambiar el Callback por el objeto Observable
       this.httpProduct.createProduct(this.formData.value).subscribe({
-        next: ( data ) => {
-          console.log( 'Crea producto exitosamente', data );
+        next: (data) => {
+          console.log('Crea producto exitosamente', data);
         },
-        error: ( err ) => {
-          console.error( 'Error al crear el producto', err );
+        error: (err) => {
+          console.error('Error al crear el producto', err);
         },
         complete: () => {
-          console.log( 'Solicitud de creación de producto completada' );
+          console.log('Solicitud de creación de producto completada');
           this.formData.reset(); // Reiniciar el formulario después de la creación exitosa
         }
       });
@@ -78,16 +93,16 @@ export class ProductNewForm {
   ngOnInit(): void {
     // Lógica a ejecutar al inicializar el componente, solicita de datos, etc.
     // console.log('ngOnInit');
-    // Cambiar el Callback por el objeto Observable
-    this.httpCategory.getAllCategories().subscribe({
-      next: ( data: any ) => {
-        console.log(data.categories);
-        this.categories = data.categories;
-      },
-      error: ( err: any ) => {
-        console.error( 'Error al obtener las categorías', err );
-      }
-    });
+
+    // [EDUCATIONAL] VERSIÓN ANTERIOR (Imperativa):
+    // this.httpCategory.getAllCategories().subscribe(data => this.categories = data);
+    //
+    // NUEVA VERSIÓN (Reactiva Refactorizada):
+    // Asignamos el Observable directamente.
+    // 1. NO nos suscribimos aquí (.subscribe()).
+    // 2. La plantilla se suscribe AUTOMÁTICAMENTE usando el pipe 'async'.
+    // 3. Cuando el componente se destruye, el 'async' se desuscribe AUTOMÁTICAMENTE (evitando memory leaks).
+    this.categories = this.httpCategory.getAllCategories();
   }
   ngOnChanges(): void {
     // Lógica a ejecutar cuando cambian las propiedades vinculadas a datos

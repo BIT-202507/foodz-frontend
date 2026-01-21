@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpCategory } from '../../../../core/services/http-category';
 import { JsonPipe, LowerCasePipe } from '@angular/common';
 import { HttpProduct } from '../../../../core/services/http-product';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product-new-form',
-  imports: [ReactiveFormsModule, LowerCasePipe, JsonPipe],
+  imports: [ReactiveFormsModule, LowerCasePipe],
   templateUrl: './product-new-form.html',
   styleUrl: './product-new-form.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,    // Estrategia de detección de cambios: verifica cuando los valores de las propiedades del clase del componente, vinculadas a datos cambian.
 })
-export class ProductNewForm {
-  edad: number = 0;   // Inferencia
-  categories: any[] = [];
+export class ProductNewForm {   // Estrategia de detección de cambios: verifica cuando
+  categories!: Observable<any[]>;   // Antes: categories: any[] = [];
   types: string[] = ['Dish', 'Ingredient', 'Addon'];
 
   // Atributo para almacenar los datos del formulario
@@ -80,14 +81,18 @@ export class ProductNewForm {
     // console.log('ngOnInit');
     // Cambiar el Callback por el objeto Observable
     this.httpCategory.getAllCategories().subscribe({
-      next: ( data: any ) => {
-        console.log(data.categories);
-        this.categories = data.categories;
+      next: ( data ) => {
+        console.log( 'Categorías obtenidas exitosamente', data );
+        this.categories = data;
       },
-      error: ( err: any ) => {
+      error: ( err ) => {
         console.error( 'Error al obtener las categorías', err );
+      },
+      complete: () => {
+        console.log( 'Solicitud de categorías completada' );
       }
     });
+    // { categories: []}
   }
   ngOnChanges(): void {
     // Lógica a ejecutar cuando cambian las propiedades vinculadas a datos

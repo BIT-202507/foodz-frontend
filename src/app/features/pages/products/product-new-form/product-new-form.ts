@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpCategory } from '../../../../core/services/http-category';
-import { JsonPipe, LowerCasePipe } from '@angular/common';
+import { AsyncPipe, JsonPipe, LowerCasePipe } from '@angular/common';
 import { HttpProduct } from '../../../../core/services/http-product';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-product-new-form',
-  imports: [ReactiveFormsModule, LowerCasePipe],
+  imports: [ReactiveFormsModule, LowerCasePipe, AsyncPipe],
   templateUrl: './product-new-form.html',
   styleUrl: './product-new-form.css',
   changeDetection: ChangeDetectionStrategy.OnPush,    // Estrategia de detección de cambios: verifica cuando los valores de las propiedades del clase del componente, vinculadas a datos cambian.
@@ -80,18 +80,7 @@ export class ProductNewForm {   // Estrategia de detección de cambios: verifica
     // Lógica a ejecutar al inicializar el componente, solicita de datos, etc.
     // console.log('ngOnInit');
     // Cambiar el Callback por el objeto Observable
-    this.httpCategory.getAllCategories().subscribe({
-      next: ( data ) => {
-        console.log( 'Categorías obtenidas exitosamente', data );
-        this.categories = data;
-      },
-      error: ( err ) => {
-        console.error( 'Error al obtener las categorías', err );
-      },
-      complete: () => {
-        console.log( 'Solicitud de categorías completada' );
-      }
-    });
+    this.categories = this.httpCategory.getAllCategories();
     // { categories: []}
   }
   ngOnChanges(): void {

@@ -1,4 +1,77 @@
 /* You can add global styles to this file, and also import other style files */
+/* Form Styles */
+.form {
+  width: 50%;
+  margin: 0 auto;
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0;
+  }
+
+  .field.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .error {
+    color: red;
+    font-size: .8rem;
+  }
+
+
+}
+
+.active {
+  background-color: green;
+  border: 1px solid green;
+}
+
+.btn {
+  border: 1px solid blue;
+  padding: .5rem 1.2rem;
+  border-radius: .3rem;
+  font-size: .85rem;
+  font-weight: bold;
+
+  &.btn-register {
+    background: #7ecc7e;
+    color: white;
+    border: 1px solid #7ecc7e;
+  }
+
+  &.btn-reset {
+    background: #F3F3F3;
+    border: 1px solid lightgray;
+  }
+}
+
+/* Table Styles */
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+
+
+
+
+
 li a {
   color: orange;
 }

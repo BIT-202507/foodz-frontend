@@ -6,13 +6,27 @@
     [formGroup]="formData">
 
     <div class="field">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" formControlName="name" />
+      <label for="name">name:</label>
+      <input type="text" id="name" name="name" formControlName="name" />
       <div class="error">
         @if(formData.get('name')?.invalid && ( formData.get('name')?.dirty || formData.get('name')?.touched )) {
 
           @if(formData.get('name')?.errors?.['required']) {
-            <small>El nombre es requerido</small>
+            <small>El nombre de usuario es requerido</small>
+          }
+
+        }
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" formControlName="username" />
+      <div class="error">
+        @if(formData.get('username')?.invalid && ( formData.get('username')?.dirty || formData.get('username')?.touched )) {
+
+          @if(formData.get('username')?.errors?.['required']) {
+            <small>El apodo del usuario es requerido</small>
           }
 
         }

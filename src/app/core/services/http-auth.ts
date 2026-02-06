@@ -21,7 +21,8 @@ export class HttpAuth {
     private http: HttpClient,
     private router: Router
   ) {
-    // TODO: Inicializar los datos del usuario y el token desde el local storage si existen
+    // Inicializar los datos del usuario y el token desde el local storage si existen (Esto asegura persistencia al recargar la página)
+    this.getLocalStorageData();
   }
 
   register(credentials: Partial<User> ): Observable<Partial<User>> {
@@ -48,6 +49,14 @@ export class HttpAuth {
     localStorage.setItem( 'user', JSON.stringify( userData ) ); // User data storage
     this.currentToken.next( token );
     this.currentUser.next( userData );
+  }
+
+  getLocalStorageData() {
+    const token = localStorage.getItem('token');
+    this.currentToken.next( token ? token : null );
+
+    const user = localStorage.getItem('user');
+    this.currentUser.next( user ? JSON.parse(user) : null );
   }
 
   clearLocalStorageData() {

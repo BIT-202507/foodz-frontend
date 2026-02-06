@@ -12,12 +12,14 @@ import { UserEditForm } from './features/pages/users/user-edit-form/user-edit-fo
 import { CategoryList } from './features/pages/categories/category-list/category-list';
 import { CategoryNewForm } from './features/pages/categories/category-new-form/category-new-form';
 import { CategoryEditForm } from './features/pages/categories/category-edit-form/category-edit-form';
+import { Dashboard } from './features/pages/dashboard/dashboard';
 
 export const routes: Routes = [
   { path: 'home', component: Home },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: '404', component: PageNotFound },
+  { path: 'dashboard', component: Dashboard },
   { path: 'dashboard/products', component: ProductList },
   { path: 'dashboard/users', component: UserList },
   { path: 'dashboard/categories', component: CategoryList },

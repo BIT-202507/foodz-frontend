@@ -10,9 +10,18 @@
     <li><a routerLink="/dashboard/users">Users</a></li>
     <li><a routerLink="/dashboard/users/new">User new</a></li>
     <li><a routerLink="/dashboard/users/edit">User edit</a></li>
+  </ul>
+
+  <!-- Desplegar información del usuario actual en funcion de si esta autenticado o no -->
+  @if( httpAuth.currentUser$ | async; as user ) {
+    <p>Bienvenido, {{ user.name }} ({{ user.role }})</p>
+    <ul class="menu">
+      <li><button (click)="onLogout()" >Logout</button></li>
+    </ul>
+  }
+  @else {
     <li><a routerLink="/login">Login</a></li>
     <li><a routerLink="/register">Register</a></li>
-    <!-- TODO: Add logout functionality -->
-    <li><button (click)="onLogout()" >Logout</button></li>
-  </ul>
+  }
+
 </nav>

@@ -31,13 +31,7 @@ export class Login {
         next: data => {
           console.log('Login successful', data);
 
-          // Verifico que el objeto traiga las propiedades token y user antes de intentar guardarlas y redireccionar
-          if( data.token && data.user ) {
-            this.httpAuth.saveLocalStorageData( data.token, data.user);   // Save token and user data to local storage
-            this.router.navigate(['/dashboard']);                         // Redirect to /dashboard or another page if needed
-          }
-
-          this.formData.reset();                                        // Reset the form after successful login
+          this.formData.reset();    // Reset the form after successful login
         },
         error: error => {
           console.error('There was an error during the login!', error);

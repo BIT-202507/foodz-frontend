@@ -1,0 +1,70 @@
+<div class="form form-product">
+  <h1>Register New Product</h1>
+
+  <form
+    class="form-new-product"
+    [formGroup]="formData"
+  >
+
+    <div class="field">
+      <label for="product-name">Name Product</label>
+      <input type="text" formControlName="name" placeholder="Ej: Pizza Pepperoni" id="product-name"/>
+    </div>
+
+    <div class="field">
+      <label for="product-description">Description</label>
+      <textarea formControlName="description" id="product-description"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="product-price">Price</label>
+      <input type="number" formControlName="price" placeholder="Ej: 30 usd" id="product-price">
+    </div>
+
+    <div class="field">
+      <label for="product-stock">Stock</label>
+      <input type="number" formControlName="stock" placeholder="Ej: 100" id="product-stock">
+    </div>
+
+    <div class="field">
+      <label for="product-category">Category</label>
+      <select formControlName="category" id="product-category">
+        <option value="">Select a category</option>
+        <option value="pizza">Pizza</option>
+        <option value="pasta">Pasta</option>
+        <option value="salad">Salad</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="product-type">Type</label>
+      <select formControlName="type" id="product-type">
+        <option value="">Select a type</option>
+        <option value="dish">Dish</option>
+        <option value="ingredient">Ingredient</option>
+        <option value="addon">Addon</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="product-status">Status</label>
+
+      <div class="options">
+        <input type="radio" formControlName="status" id="status-active" value="active">
+        <label for="status-active">Active</label>
+
+        <input type="radio" formControlName="status" id="status-inactive" value="inactive">
+        <label for="status-inactive">Inactive</label>
+      </div>
+
+    </div>
+
+    <div class="field buttons">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="reset" class="btn btn-secondary">Cancel</button>
+    </div>
+
+  </form>
+
+
+</div>

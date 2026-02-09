@@ -5,11 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class HttpProduct {
-  constructor( private http: HttpClient ) {}
+  constructor( private httpClient: HttpClient ) {}
 
-  createProduct(productData: any) {
-    // Lógica para crear un nuevo producto
-    // console.log(productData);
-    return this.http.post<any>('http://localhost:3000/api/v1/products', productData);
-  }
+  createProduct() {}
 }

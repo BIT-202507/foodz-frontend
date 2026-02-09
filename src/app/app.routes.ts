@@ -10,6 +10,7 @@ import { CategoryList } from './features/pages/categories/category-list/category
 import { CategoryNewForm } from './features/pages/categories/category-new-form/category-new-form';
 import { CategoryEditForm } from './features/pages/categories/category-edit-form/category-edit-form';
 import { Dashboard } from './features/pages/dashboard/dashboard';
+import { ProductNewForm } from './features/pages/products/product-new-form/product-new-form';
 
 export const routes: Routes = [
   { path: 'home', component: Home },
@@ -19,6 +20,7 @@ export const routes: Routes = [
   { path: 'dashboard', component: Dashboard },
   { path: 'dashboard/users', component: UserList },
   { path: 'dashboard/categories', component: CategoryList },
+  { path: 'dashboard/product/new', component: ProductNewForm },
   { path: 'dashboard/users/new', component: UserNewForm },
   { path: 'dashboard/users/edit', component: UserEditForm },
   { path: 'dashboard/categories/new', component: CategoryNewForm },

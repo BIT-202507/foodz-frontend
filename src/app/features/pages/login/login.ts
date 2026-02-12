@@ -31,7 +31,9 @@ export class Login {
         next: data => {
           console.log('Login successful', data);
 
-          this.formData.reset();    // Reset the form after successful login
+          this.formData.reset();                 // Reset the form after successful login
+          this.router.navigate(['/dashboard']);  // Navigate to dashboard after login
+
         },
         error: error => {
           console.error('There was an error during the login!', error);

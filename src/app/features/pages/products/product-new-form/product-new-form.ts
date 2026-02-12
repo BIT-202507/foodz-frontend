@@ -4,6 +4,7 @@ import { HttpCategory } from '../../../../core/services/http-category';
 import { AsyncPipe, JsonPipe, LowerCasePipe } from '@angular/common';
 import { HttpProduct } from '../../../../core/services/http-product';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-new-form',
@@ -21,7 +22,8 @@ export class ProductNewForm {   // Estrategia de detección de cambios: verifica
 
   constructor(
     private httpCategory: HttpCategory,
-    private httpProduct: HttpProduct
+    private httpProduct: HttpProduct,
+    private router: Router
   ) {
     // Definido el formulario
     this.formData = new FormGroup({
@@ -45,6 +47,9 @@ export class ProductNewForm {   // Estrategia de detección de cambios: verifica
       this.httpProduct.createProduct(this.formData.value).subscribe({
         next: ( data ) => {
           console.log( 'Crea producto exitosamente', data );
+
+          this.formData.reset(); // Reiniciar el formulario después de la creación exitosa
+          this.router.navigate(['/dashboard/products']);  // Navigate to dashboard after login
         },
         error: ( err ) => {
           console.error( 'Error al crear el producto', err );

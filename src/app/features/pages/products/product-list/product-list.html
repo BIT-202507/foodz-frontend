@@ -1,1 +1,22 @@
-<p>product-list works!</p>
+<h1>Products</h1>
+
+<table>
+  <tr>
+    <th>Product Name</th>
+    <th>Description</th>
+    <th>Price</th>
+    <th>Actions</th>
+  </tr>
+  @for (item of products | async; track $index) {
+    <tr>
+      <td>{{ item.name }}</td>
+      <td>{{ item.description }}</td>
+      <td>{{ item.price | currency }}</td>
+      <td>
+        <button>Edit</button>
+        <button>Delete</button>
+      </td>
+    </tr>
+  }
+
+</table>

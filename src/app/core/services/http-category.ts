@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 
 import { Category } from '../interfaces/category';
 
@@ -80,9 +80,22 @@ export class HttpCategory {
    * @param category Datos modificados
    */
   updateCategory(id: string, category: Partial<Category>): Observable<Category> {
-    return this.http.patch<{ category: Category }>(`${this.apiUrl}/${id}`, category, { headers: this.getHeaders() })
+    const headers = this.getHeaders();
+    const token = localStorage.getItem('token');
+    console.log('📤 PATCH Request - ID:', id, 'Data:', category, 'Token exists:', !!token);
+    console.log('🔑 Headers being sent:', {
+      'X-Token': headers.get('X-Token'),
+      'Content-Type': headers.get('Content-Type')
+    });
+
+    return this.http.patch<{ category: Category }>(`${this.apiUrl}/${id}`, category, { headers })
       .pipe(
-        map(response => response.category)
+        tap( response => console.log('✅ PATCH Success:', response ) ),
+        map(response => response.category),
+        catchError( error => {
+          console.error(error);
+          return of(null as any);
+        })
       );
   }
 

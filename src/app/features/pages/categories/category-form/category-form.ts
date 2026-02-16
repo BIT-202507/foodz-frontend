@@ -72,6 +72,7 @@ export class CategoryForm {
    * Carga los datos de la categoría a editar y parchea el formulario.
    */
   loadCategoryData(id: string) {
+    console.log('📥 Loading category ID:', id);
     this.loading = true;
     this.categoryService.getCategoryById(id).subscribe({
       next: (category) => {
@@ -109,20 +110,23 @@ export class CategoryForm {
     if (this.formData.valid) {
       this.loading = true;
       const categoryData = this.formData.value;
+      console.log('📋 Form Data:', categoryData, 'Edit Mode:', this.isEditMode, 'ID:', this.categoryId);
 
       let request$: Observable<Category>;
 
       if (this.isEditMode && this.categoryId) {
         // En modo edición, llamamos a update
+        console.log('🔄 Updating category ID:', this.categoryId);
         request$ = this.categoryService.updateCategory(this.categoryId, categoryData);
       } else {
         // En modo creación, llamamos a create
+        console.log('➕ Creating new category');
         request$ = this.categoryService.createCategory(categoryData);
       }
 
       request$.subscribe({
         next: (res) => {
-          console.log('Operation successful:', res);
+          console.log('✅ Operation successful:', res);
           this.loading = false;
           // Navegación tras éxito
           this.router.navigate(['/dashboard/categories'])
@@ -130,7 +134,7 @@ export class CategoryForm {
             .catch(err => console.error('Navigation error:', err));
         },
         error: (err) => {
-          console.error('Error saving category:', err);
+          console.error('❌ Error saving category:', err);
           this.loading = false;
         }
       });

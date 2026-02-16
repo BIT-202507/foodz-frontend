@@ -1,9 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '../interfaces/user';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { ResponseLogin } from '../interfaces/response-login';
 import { Router } from '@angular/router';
+
+import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
+
+import { User } from '../interfaces/user';
+import { ResponseLogin } from '../interfaces/response-login';
 
 @Injectable({
   providedIn: 'root',
@@ -57,6 +59,10 @@ export class HttpAuth {
 
     const user = localStorage.getItem('user');
     this.currentUser.next( user ? JSON.parse(user) : null );
+
+    return {
+      token, user
+    }
   }
 
   clearLocalStorageData() {
@@ -69,6 +75,36 @@ export class HttpAuth {
   logout() {
     this.clearLocalStorageData();
     this.router.navigate(['/login']);
+  }
+
+  checkAuthStatus() : Observable<boolean> {
+    // Paso 1: Verificar si el token existe en el local storage y obtenerlo
+    const { token } = this.getLocalStorageData();       // Desestructurar los datos obtenidos del local storage (token)
+
+    // Responder al cliente si no existe el token (false) o si existe (true)
+    if( ! token ) {
+      this.clearLocalStorageData();  // Limpiar cualquier dato residual en caso de que el token no exista
+      return of(false);                  // Bloquea el flujo de la logica del algoritmo
+    }
+
+    // Paso 2: Crear el encabezado con el nombre del campo que va a contener el token que sera enviado al Backend
+    const headers = new HttpHeaders().set( 'X-Token', token );
+
+    // Paso 3: Realizar una solicitud al backend para validar el token (Endpoint de validación de token)
+    return this.http.get<any>('http://localhost:3000/api/v1/auth/renew-token', { headers }).pipe(
+      map( ( response ) => {
+        if( !response.token && !response.user ) {
+          return false;           // Bloquea el acceso a la ruta (Siempre lo retorna dentro de un Observable)
+        }
+
+        this.saveLocalStorageData(response.token, response.user );    // Actualiza los datos en el localStorage
+        return true;              // Permite el acceso a la ruta (Siempre lo retorna dentro de un Observable)
+      } ),
+      catchError( ( error ) => {
+        console.error( 'ERROR: ', error  );
+        return of( false );
+      })
+    );
   }
 
 }

@@ -1,0 +1,80 @@
+<div class="form-container">
+    <div class="header">
+        <h2>{{ isEditMode ? 'Editar Categoría' : 'Nueva Categoría' }}</h2>
+    </div>
+
+    <!-- Feedback visual de carga usando el nuevo control flow @if de Angular 17+ -->
+    @if (loading) {
+    <p class="loading-text">{{ isEditMode ? 'Actualizando categoría...' : 'Guardando categoría...' }}</p>
+    }
+
+    <!-- Vinculación del formulario reactivo con [formGroup] y manejo del evento (ngSubmit) -->
+    <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+
+        <!-- CAMPO NOMBRE -->
+        <div class="form-group">
+            <label for="name">Nombre de la Categoría <span class="required">*</span></label>
+            <!-- formControlName vincula este input con la propiedad 'name' del FormGroup -->
+            <input type="text" id="name" formControlName="name" placeholder="Ej: Entradas">
+
+            <!-- Mostrar errores de validación solo si el campo es inválido y ha sido tocado/modificado -->
+            @if (name?.invalid && (name?.dirty || name?.touched)) {
+            <div class="error-messages">
+                <!-- Verificamos tipos específicos de errores -->
+                @if (name?.errors?.['required']) { <small class="error">El nombre es obligatorio.</small> }
+            </div>
+            }
+        </div>
+
+        <!-- CAMPO DESCRIPCIÓN -->
+        <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea id="description" formControlName="description" rows="4"
+                placeholder="Descripción breve..."></textarea>
+
+            @if (description?.invalid && (description?.dirty || description?.touched)) {
+            <div class="error-messages">
+                @if (description?.errors?.['maxlength']) { <small class="error">Máximo 500 caracteres.</small> }
+            </div>
+            }
+        </div>
+
+        <!-- CAMPO CATEGORÍA PADRE -->
+        <div class="form-group">
+            <label for="parent_id">Categoría Padre (Opcional)</label>
+            <select id="parent_id" formControlName="parent_id">
+                <!-- [ngValue]="null" es IMPORTANTE para que Reactive Forms entienda que es un valor nulo real, no el string "null" -->
+                <option [ngValue]="null">-- Ninguna (Categoría Raíz) --</option>
+
+                <!--
+                     USO DE ASYNC PIPE:
+                     Subscribe automáticamente al observable availableCategories$ y gestiona la desuscripción.
+                     'as categories' asigna el valor emitido a una variable local para usarla en el bucle.
+                -->
+                @if (availableCategories$ | async; as categories) {
+                <!-- Iteración optimizada con @for y track para mejor rendimiento de renderizado -->
+                @for (cat of categories; track cat._id) {
+                <option [ngValue]="cat._id">{{ cat.name }} (Nivel: {{ cat.level }})</option>
+                }
+                }
+            </select>
+            <small class="hint">Selecciona una categoría superior si esta es una subcategoría.</small>
+        </div>
+
+        <!-- CAMPO ACTIVO (CHECKBOX) -->
+        <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+                <input type="checkbox" formControlName="isActive">
+                Categoría Activa
+            </label>
+        </div>
+
+        <div class="actions">
+            <!-- Deshabilitar botón si el formulario es inválido o se está guardando -->
+            <button type="submit" class="btn-save" [disabled]="formData.invalid || loading">
+                {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+            </button>
+            <a routerLink="/dashboard/categories" class="btn-cancel">Cancelar</a>
+        </div>
+    </form>
+</div>

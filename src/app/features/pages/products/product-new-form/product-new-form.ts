@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpCategory } from '../../../../core/services/http-category';
 import { AsyncPipe, JsonPipe, LowerCasePipe } from '@angular/common';
-import { HttpProduct } from '../../../../core/services/http-product';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
+import { HttpProduct } from '../../../../core/services/http-product';
+import { HttpCategory } from '../../../../core/services/http-category';
 @Component({
   selector: 'app-product-new-form',
   imports: [ReactiveFormsModule, LowerCasePipe, AsyncPipe],
@@ -85,7 +85,7 @@ export class ProductNewForm {   // Estrategia de detección de cambios: verifica
     // Lógica a ejecutar al inicializar el componente, solicita de datos, etc.
     // console.log('ngOnInit');
     // Cambiar el Callback por el objeto Observable
-    this.categories = this.httpCategory.getAllCategories();
+    this.categories = this.httpCategory.getCategories();
     // { categories: []}
   }
   ngOnChanges(): void {

@@ -1,1 +1,75 @@
-<p>category-list works!</p>
+<div class="list-container">
+    <div class="header-actions">
+        <h2>Listado de Categorías</h2>
+        <!-- Botón para navegar al formulario de creación -->
+        <a routerLink="create" class="btn-create">
+            + Nueva Categoría
+        </a>
+    </div>
+
+    <!--
+      Tabla de datos.
+      Usamos @if con pipe async para desenrollar el observable categories$.
+      Si el observable emite, 'categories' tendrá el array de datos.
+    -->
+    @if (categories$ | async; as categories) {
+    @if (categories.length > 0) {
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Nivel</th>
+                <th>Subcategorías</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iteramos sobre las categorías -->
+            @for (cat of categories; track cat._id) {
+            <tr>
+                <td>
+                    {{ cat.name }}
+                    @if (getParentName(cat); as parentName) {
+                    <br>
+                    <small class="parent-name">({{ parentName }})</small>
+                    }
+                </td>
+                <td>{{ cat.description || 'Sin descripción' }}</td>
+                <td>
+                    <span class="level-badge level-{{cat.level}}">
+                        Nivel {{ cat.level }}
+                    </span>
+                </td>
+                <td class="text-center">
+                    {{ cat.childrenCount || 0 }}
+                </td>
+                <td>
+                    <!-- Renderizado condicional del estado -->
+                    @if (cat.isActive) {
+                    <span class="status-active">Activo</span>
+                    } @else {
+                    <span class="status-inactive">Inactivo</span>
+                    }
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <a [routerLink]="['edit', cat._id]" class="btn-edit">Editar</a>
+                        <button (click)="deleteCategory(cat._id)" class="btn-delete">Eliminar</button>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    } @else {
+    <div class="empty-state">
+        <p>No hay categorías registradas.</p>
+    </div>
+    }
+    } @else {
+    <!-- Estado de carga (mientras el observable no emita) -->
+    <p class="loading">Cargando categorías...</p>
+    }
+</div>

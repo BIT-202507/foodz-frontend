@@ -1,20 +1,60 @@
 <h1>Products</h1>
 
-<table>
+<a routerLink="/dashboard/product/new">Product new</a>
+
+<table class="table table-products" >
   <tr>
-    <th>Product Name</th>
-    <th>Description</th>
-    <th>Price</th>
+    <th>Previews</th>
+    <th>General</th>
+    <th>Figures</th>
     <th>Actions</th>
   </tr>
-  @for (item of products | async; track $index) {
+  @for (product of products | async; track $index) {
     <tr>
-      <td>{{ item.name }}</td>
-      <td>{{ item.description }}</td>
-      <td>{{ item.price | currency }}</td>
       <td>
-        <button>Edit</button>
-        <button>Delete</button>
+        <img class="product-preview" [src]="product.image_url" [alt]="product.name" [title]="product.name" />
+      </td>
+      <td>
+        <div class="table-information">
+          <div class="table-title">
+            <small class="label">
+              <strong>Product Name</strong>
+              <p>{{ product.name }}</p>
+            </small>
+          </div>
+          <div class="table-description">
+            <small class="label">
+              <strong>Description</strong>
+              <p>{{ product.description }}</p>
+            </small>
+          </div>
+          <div class="table-category">
+            <small class="label">
+              <strong>Category</strong>
+              <p>{{ product.category.name }}</p>
+            </small>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="table-figures">
+          <div class="table-price">
+            <small class="label">
+              <strong>Price</strong>
+              <p>{{ product.price | currency}}</p>
+            </small>
+          </div>
+          <div class="table-stock">
+            <small class="label">
+              <strong>Stock</strong>
+              <p>{{ product.stock }}</p>
+            </small>
+          </div>
+        </div>
+      </td>
+      <td>
+        <button class="btn btn-primary" (click)="onEdit(product._id)">Edit</button>
+        <button class="btn btn-secondary" (click)="onDelete(product._id)">Delete</button>
       </td>
     </tr>
   }

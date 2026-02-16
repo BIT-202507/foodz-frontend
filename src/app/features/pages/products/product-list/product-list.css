@@ -1,0 +1,7 @@
+.product-preview {
+  width: 9rem;
+  height: 9rem;
+  object-fit: cover;
+  border-radius: 5rem;
+  border: 2px solid transparent;
+}

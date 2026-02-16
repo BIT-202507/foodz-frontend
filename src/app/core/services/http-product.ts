@@ -24,4 +24,16 @@ export class HttpProduct {
       })
     );
   }
+
+  updateProduct(id: string|null, productUpdated: any ) {
+    return this.http.patch<any>(`http://localhost:3000/api/v1/products/${id}`, productUpdated )
+  }
+
+  deleteProduct(id: string) {
+    return this.http.delete<any>(`http://localhost:3000/api/v1/products/${id}`);
+  }
+
+  getProduct(id: string | null) {
+    return this.http.get<any>(`http://localhost:3000/api/v1/products/${id}`);
+  }
 }

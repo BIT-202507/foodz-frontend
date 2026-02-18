@@ -14,22 +14,91 @@ import { CategoryForm } from './features/pages/categories/category-form/category
 import { Dashboard } from './features/pages/dashboard/dashboard';
 
 import { authGuard } from './core/guards/auth-guard';
+import { publicGuard } from './core/guards/public-guard';
+import { roleGuard } from './core/guards/role-guard';
 
 export const routes: Routes = [
-  { path: 'home', component: Home },
-  { path: 'login', component: Login },
-  { path: 'register', component: Register },
-  { path: '404', component: PageNotFound },
-  { path: 'dashboard', component: Dashboard, canActivate: [ authGuard ] },
-  { path: 'dashboard/products', component: ProductList, canActivate: [ authGuard ] },
-  { path: 'dashboard/users', component: UserList, canActivate: [ authGuard ] },
-  { path: 'dashboard/categories', component: CategoryList, canActivate: [ authGuard ] },
-  { path: 'dashboard/product/new', component: ProductNewForm, canActivate: [ authGuard ] },
-  { path: 'dashboard/product/edit/:id', component: ProductEditForm, canActivate: [ authGuard ] },
-  { path: 'dashboard/users/new', component: UserNewForm, canActivate: [ authGuard ] },
-  { path: 'dashboard/users/edit', component: UserEditForm, canActivate: [ authGuard ] },
-  { path: 'dashboard/categories/new', component: CategoryForm, canActivate: [ authGuard ] },
-  { path: 'dashboard/categories/edit/:id', component: CategoryForm, canActivate: [ authGuard ] },
+  {
+    path: 'home',
+    component: Home
+  },
+  {
+    path: 'login',
+    component: Login,
+    canActivate: [publicGuard]
+  },
+  {
+    path: 'register',
+    component: Register,
+    canActivate: [publicGuard]
+  },
+  {
+    path: '404',
+    component: PageNotFound
+  },
+  // NOTA: /dashboard es la ruta donde debe llegar cualquier usuario autenticado
+  {
+    path: 'dashboard',
+    component: Dashboard,
+    canActivate: [authGuard]
+  },
+  // NOTA: /dashboard/lo-que-sea son las rutas de usuarios autenticados con un rol establecido
+  {
+    path: 'dashboard/products',
+    component: ProductList,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin', 'colaborator'] }
+  },
+  {
+    path: 'dashboard/users',
+    component: UserList,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin'] }
+  },
+  {
+    path: 'dashboard/categories',
+    component: CategoryList,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin', 'colaborator'] }
+  },
+  {
+    path: 'dashboard/product/new',
+    component: ProductNewForm,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin', 'colaborator'] }
+  },
+  {
+    path: 'dashboard/product/edit/:id',
+    component: ProductEditForm,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin'] }
+  },
+  {
+    path: 'dashboard/users/new',
+    component: UserNewForm,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin'] }
+  },
+  {
+    path: 'dashboard/users/edit',
+    component: UserEditForm,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin'] }
+  },
+  {
+    path: 'dashboard/categories/new',
+    component: CategoryForm,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin', 'colaborator'] }
+  },
+  {
+    path: 'dashboard/categories/edit/:id',
+    component: CategoryForm,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['admin', 'colaborator'] }
+  },
+
+  // Redirecciones (Siempre al final)
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: '404', pathMatch: 'full' },
 ];

@@ -1,11 +1,14 @@
 <nav class="navbar">
   <ul class="menu">
     <li><a routerLink="/">Home</a></li>
-    <li><a routerLink="/dashboard/products">Products</a></li>
-    <li><a routerLink="/dashboard/categories">Categories</a></li>
-    <li><a routerLink="/dashboard/users">Users</a></li>
-    <li><a routerLink="/dashboard/users/new">User new</a></li>
-    <li><a routerLink="/dashboard/users/edit">User edit</a></li>
+
+    <!-- Es una forma de visualizar enlaces cuando se esta autenticado -->
+    @if( httpAuth.currentUser$ | async; as user ) {
+      <li><a routerLink="/dashboard/products">Products</a></li>
+      <li><a routerLink="/dashboard/categories">Categories</a></li>
+      <li><a routerLink="/dashboard/users">Users</a></li>
+    }
+
   </ul>
 
   <!-- Desplegar información del usuario actual en funcion de si esta autenticado o no -->

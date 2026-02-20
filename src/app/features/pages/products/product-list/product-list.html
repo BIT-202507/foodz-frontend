@@ -55,10 +55,10 @@
       </div>
     </td>
     <td>
-      @if( (user | async)?.role === 'admin' ) {
-        <button class="btn btn-primary" (click)="onEdit(product._id)">Edit</button>
-        <button class="btn btn-secondary" (click)="onDelete(product._id)">Delete</button>
-      }
+      <!-- @if( (user | async)?.role === 'admin' ) { -->
+        <button class="btn btn-primary" (click)="onEdit(product._id)" [disabled]="(user | async)?.role === 'admin'">Edit</button>
+        <button class="btn btn-secondary" (click)="onDelete(product._id)" [disabled]="(user | async)?.role === 'admin'">Delete</button>
+      <!-- } -->
     </td>
   </tr>
   }

@@ -107,4 +107,18 @@ export class HttpAuth {
     );
   }
 
+  getHeaders(): any {
+    // Paso 1: Verificar si el token existe en el local storage y obtenerlo
+    const { token } = this.getLocalStorageData();       // Desestructurar los datos obtenidos del local storage (token)
+
+    // Responder al cliente si no existe el token (false) o si existe (true)
+    if( ! token ) {
+      this.clearLocalStorageData();  // Limpiar cualquier dato residual en caso de que el token no exista
+      return of(false);                  // Bloquea el flujo de la logica del algoritmo
+    }
+
+    // Paso 2: Crear el encabezado con el nombre del campo que va a contener el token que sera enviado al Backend
+    return new HttpHeaders().set( 'X-Token', token );
+  }
+
 }

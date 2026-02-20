@@ -1,0 +1,16 @@
+.dashboard.dashboard-component {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.aside {
+  background: crimson;
+  height: 100vh;
+}
+
+.menu-main-dashboard {
+  list-style: none;
+  padding: 1rem;
+}

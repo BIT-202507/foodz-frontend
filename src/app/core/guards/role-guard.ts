@@ -22,14 +22,14 @@ export const roleGuard: CanActivateFn = async (route, state) => {
     return false;
   }
 
-  // Paso 2: Verificamos si la ruta no tiene definidos los roles, permitimos el acceso
+  // Paso 2: Verificamos si la ruta no tiene definidos los roles.
   if (!allowedRoles || allowedRoles.length == 0) {
-    return true;
+    return true;    // Permitimos el acceso
   }
 
   // Paso 3: Verificamos si el rol del usuario esta en la lista de permitidos (data.roles)
   if (role && allowedRoles.includes(role)) {
-    return true;
+    return true;    // Permitimos el acceso
   }
 
   // Por defecto: Si no tiene permiso, redirigir (opcional, o simplemente denegar)

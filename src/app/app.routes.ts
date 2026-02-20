@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+
+
 import { Home } from './features/pages/home/home';
 import { Login } from './features/pages/login/login';
 import { Register } from './features/pages/register/register';
@@ -17,14 +19,17 @@ import { authGuard } from './core/guards/auth-guard';
 import { publicGuard } from './core/guards/public-guard';
 import { roleGuard } from './core/guards/role-guard';
 
+
 export const routes: Routes = [
   {
     path: 'home',
     component: Home
+    // loadComponent: () => import( './features/pages/home/home' ).then( ( m ) => m.Home )   // LazyLoad (Carga perezosa): del Componente => Version larga, el then resuelve la promesa
   },
   {
     path: 'login',
     component: Login,
+    // loadComponent: () => import( './features/pages/login/login' ),     // LazyLoad (Carga perezosa): del Componente => Version corta, se agrega defaul a la exportacion de la clase del componente
     canActivate: [publicGuard]
   },
   {
@@ -36,66 +41,71 @@ export const routes: Routes = [
     path: '404',
     component: PageNotFound
   },
-  // NOTA: /dashboard es la ruta donde debe llegar cualquier usuario autenticado
+
+  // Agrupa todas las rutas permisionadas
   {
+    // NOTA: /dashboard es la ruta donde debe llegar cualquier usuario autenticado
     path: 'dashboard',
     component: Dashboard,
-    canActivate: [authGuard]
-  },
-  // NOTA: /dashboard/lo-que-sea son las rutas de usuarios autenticados con un rol establecido
-  {
-    path: 'dashboard/products',
-    component: ProductList,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin', 'colaborator'] }
-  },
-  {
-    path: 'dashboard/users',
-    component: UserList,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin'] }
-  },
-  {
-    path: 'dashboard/categories',
-    component: CategoryList,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin', 'colaborator'] }
-  },
-  {
-    path: 'dashboard/product/new',
-    component: ProductNewForm,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin', 'colaborator'] }
-  },
-  {
-    path: 'dashboard/product/edit/:id',
-    component: ProductEditForm,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin'] }
-  },
-  {
-    path: 'dashboard/users/new',
-    component: UserNewForm,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin'] }
-  },
-  {
-    path: 'dashboard/users/edit',
-    component: UserEditForm,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin'] }
-  },
-  {
-    path: 'dashboard/categories/new',
-    component: CategoryForm,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin', 'colaborator'] }
-  },
-  {
-    path: 'dashboard/categories/edit/:id',
-    component: CategoryForm,
-    canActivate: [authGuard, roleGuard],
-    data: { roles: ['admin', 'colaborator'] }
+    canActivate: [authGuard],
+    // OBLIGATORIO: Toda ruta hija requiere que su componente padre tenga un <router-outlet> donde desplegar sus componentes hijos
+    children: [
+      // Todas las rutas hijas que inician con 'dashboard'
+      {
+        path: 'products',
+        component: ProductList,
+        canActivate: [roleGuard],
+        data: { roles: ['admin', 'colaborator'] }
+      },
+      {
+        path: 'users',
+        component: UserList,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'categories',
+        component: CategoryList,
+        canActivate: [roleGuard],
+        data: { roles: ['admin', 'colaborator'] }
+      },
+      {
+        path: 'product/new',
+        component: ProductNewForm,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'product/edit/:id',
+        component: ProductEditForm,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'users/new',
+        component: UserNewForm,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'users/edit',
+        component: UserEditForm,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'categories/new',
+        component: CategoryForm,
+        canActivate: [roleGuard],
+        data: { roles: ['admin', 'colaborator'] }
+      },
+      {
+        path: 'categories/edit/:id',
+        component: CategoryForm,
+        canActivate: [roleGuard],
+        data: { roles: ['admin', 'colaborator'] }
+      },
+    ]
   },
 
   // Redirecciones (Siempre al final)

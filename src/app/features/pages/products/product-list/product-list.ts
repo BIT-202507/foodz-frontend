@@ -20,7 +20,7 @@ export class ProductList {
   private refreshProductsTrigger$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
 
   private httpAuth = inject(HttpAuth);
-  public user = firstValueFrom(this.httpAuth.currentUser$);
+  public user = firstValueFrom(this.httpAuth.currentUser$);    // Convertimos el Observable en una Promesa
 
   constructor(
     private httpProduct: HttpProduct,

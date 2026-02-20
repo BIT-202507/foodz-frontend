@@ -12,7 +12,7 @@ import { AsyncPipe, LowerCasePipe } from '@angular/common';
   templateUrl: './product-edit-form.html',
   styleUrls: ['./product-edit-form.css'],
 })
-export class ProductEditForm {
+export default class ProductEditForm {
   private getProductSubscription!: Subscription;
   private updatedProductSubscription!: Subscription;
   // Suscripción que escucha los cambios en los valores del formulario para
@@ -39,11 +39,11 @@ export class ProductEditForm {
     this.formData = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl(''),
-      category: new FormControl(null, [Validators.required] ),
-      type: new FormControl('dish', [Validators.required] ),
-      price: new FormControl(0, [Validators.required, Validators.min(0)] ),
-      image_url: new FormControl('', [Validators.required, Validators.minLength(10)] ),
-      stock: new FormControl(1, [Validators.required, Validators.min(1)] ),
+      category: new FormControl(null, [Validators.required]),
+      type: new FormControl('dish', [Validators.required]),
+      price: new FormControl(0, [Validators.required, Validators.min(0)]),
+      image_url: new FormControl('', [Validators.required, Validators.minLength(10)]),
+      stock: new FormControl(1, [Validators.required, Validators.min(1)]),
       status: new FormControl('active'),
     });
   }
@@ -51,12 +51,12 @@ export class ProductEditForm {
   ngOnInit() {
     this.productId = this.route.snapshot.paramMap.get('id');
 
-    if(!this.productId) {
+    if (!this.productId) {
       this.router.navigateByUrl('/dashboard/products');
       return;
     }
 
-    this.onSearchProductById( this.productId );
+    this.onSearchProductById(this.productId);
     this.categories = this.httpCategory.getCategories();
 
     this.formChangesSubscription = this.formData.valueChanges.subscribe(() => {
@@ -76,26 +76,26 @@ export class ProductEditForm {
   }
 
   onSearchProductById(id: string) {
-    this.getProductSubscription = this.httpProduct.getProduct( id ).subscribe({
-      next: ( data ) => {
+    this.getProductSubscription = this.httpProduct.getProduct(id).subscribe({
+      next: (data) => {
         // console.log( data );
         const { product } = data;
-        this.onLoadFormData( product );
+        this.onLoadFormData(product);
       },
-      error: ( error ) => {
+      error: (error) => {
         console.error(error);
       },
-      complete: () => {}
+      complete: () => { }
     });
   }
 
-  onLoadFormData( productData: any ) {
+  onLoadFormData(productData: any) {
     const { name, description, category, type, price, image_url, stock, status } = productData;
 
     this.productOriginal = {
       name,
       description,
-      category: this.onGetTheCategoryId( category ),
+      category: this.onGetTheCategoryId(category),
       type,
       price,
       image_url,
@@ -106,7 +106,7 @@ export class ProductEditForm {
     this.formData.patchValue({
       name,
       description,
-      category: this.onGetTheCategoryId( category ),
+      category: this.onGetTheCategoryId(category),
       type,
       price,
       image_url,
@@ -121,32 +121,32 @@ export class ProductEditForm {
     this.formChanged = false;
   }
 
-  onGetTheCategoryId( category: any ) {
+  onGetTheCategoryId(category: any) {
     // Verificar que el control de categoría almacene el _id de la categoría (cadena)
     return category && typeof category === 'object' ? category._id : category;
   }
 
   onSubmit() {
-    if( this.formData.valid ) {
+    if (this.formData.valid) {
       // Lógica para manejar el envío del formulario
       console.log('Envia estos datos al servicio', this.formData.value);
-      if(!this.productId) {
+      if (!this.productId) {
         console.error('No product id available for update');
         return;
       }
       // Cambiar el Callback por el objeto Observable
       this.updatedProductSubscription = this.httpProduct.updateProduct(this.productId, this.formData.value).subscribe({
-        next: ( data ) => {
-          console.log( 'Crea producto exitosamente', data );
+        next: (data) => {
+          console.log('Crea producto exitosamente', data);
 
           this.formData.reset(); // Reiniciar el formulario después de la creación exitosa
           this.router.navigate(['/dashboard/products']);  // Navigate to dashboard after login
         },
-        error: ( err ) => {
-          console.error( 'Error al crear el producto', err );
+        error: (err) => {
+          console.error('Error al crear el producto', err);
         },
         complete: () => {
-          console.log( 'Solicitud de creación de producto completada' );
+          console.log('Solicitud de creación de producto completada');
           this.formData.reset(); // Reiniciar el formulario después de la creación exitosa
         }
       });
@@ -163,10 +163,10 @@ export class ProductEditForm {
 
   onDestroy() {
     // Limpiar la suscripción que escucha los cambios del formulario para evitar fugas de memoria.
-    if(this.getProductSubscription) {
+    if (this.getProductSubscription) {
       this.getProductSubscription.unsubscribe();
     }
-    if(this.updatedProductSubscription) {
+    if (this.updatedProductSubscription) {
       this.updatedProductSubscription.unsubscribe();
     }
     if (this.formChangesSubscription) {

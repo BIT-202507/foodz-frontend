@@ -13,7 +13,7 @@ import { HttpCategory } from '../../../../core/services/http-category';
   styleUrl: './product-new-form.css',
   changeDetection: ChangeDetectionStrategy.OnPush,    // Estrategia de detección de cambios: verifica cuando los valores de las propiedades del clase del componente, vinculadas a datos cambian.
 })
-export class ProductNewForm {   // Estrategia de detección de cambios: verifica cuando
+export default class ProductNewForm {   // Estrategia de detección de cambios: verifica cuando
   categories!: Observable<any[]>;   // Antes: categories: any[] = [];
   types: string[] = ['Dish', 'Ingredient', 'Addon'];
 
@@ -29,33 +29,33 @@ export class ProductNewForm {   // Estrategia de detección de cambios: verifica
     this.formData = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl(''),
-      category: new FormControl('', [Validators.required] ),
-      type: new FormControl('dish', [Validators.required] ),
-      price: new FormControl(0, [Validators.required, Validators.min(0)] ),
-      image_url: new FormControl('', [Validators.required, Validators.minLength(10)] ),
-      stock: new FormControl(0, [Validators.required, Validators.min(1)] ),
+      category: new FormControl('', [Validators.required]),
+      type: new FormControl('dish', [Validators.required]),
+      price: new FormControl(0, [Validators.required, Validators.min(0)]),
+      image_url: new FormControl('', [Validators.required, Validators.minLength(10)]),
+      stock: new FormControl(0, [Validators.required, Validators.min(1)]),
       status: new FormControl('active'),
     });
   }
 
   onSubmit() {
     // Verifica que el formulario sea válido antes de enviarlo
-    if( this.formData.valid ) {
+    if (this.formData.valid) {
       // Lógica para manejar el envío del formulario
       console.log('Envia estos datos al servicio', this.formData.value);
       // Cambiar el Callback por el objeto Observable
       this.httpProduct.createProduct(this.formData.value).subscribe({
-        next: ( data ) => {
-          console.log( 'Crea producto exitosamente', data );
+        next: (data) => {
+          console.log('Crea producto exitosamente', data);
 
           this.formData.reset(); // Reiniciar el formulario después de la creación exitosa
           this.router.navigate(['/dashboard/products']);  // Navigate to dashboard after login
         },
-        error: ( err ) => {
-          console.error( 'Error al crear el producto', err );
+        error: (err) => {
+          console.error('Error al crear el producto', err);
         },
         complete: () => {
-          console.log( 'Solicitud de creación de producto completada' );
+          console.log('Solicitud de creación de producto completada');
           this.formData.reset(); // Reiniciar el formulario después de la creación exitosa
         }
       });

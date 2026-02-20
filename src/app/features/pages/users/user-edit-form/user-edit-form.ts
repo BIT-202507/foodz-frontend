@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './user-edit-form.html',
   styleUrl: './user-edit-form.css',
 })
-export class UserEditForm {
+export default class UserEditForm {
 
 }

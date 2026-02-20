@@ -13,8 +13,8 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './category-form.html',
   styleUrl: './category-form.css',
 })
-export class CategoryForm {
-   // Inyección de dependencias moderna
+export default class CategoryForm {
+  // Inyección de dependencias moderna
   private fb = inject(FormBuilder);
   private categoryService = inject(HttpCategory);
   private router = inject(Router);

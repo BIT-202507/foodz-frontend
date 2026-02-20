@@ -11,7 +11,7 @@ import { HttpAuth } from '../../../../core/services/http-auth';
   templateUrl: './product-list.html',
   styleUrl: './product-list.css',
 })
-export class ProductList {
+export default class ProductList {
   private deleteProductSubscription!: Subscription;
 
   // Atributo para almacenar la lista de productos

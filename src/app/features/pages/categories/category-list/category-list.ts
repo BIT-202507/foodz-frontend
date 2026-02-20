@@ -9,11 +9,11 @@ import { Category } from '../../../../core/interfaces/category';
 
 @Component({
   selector: 'app-category-list',
-  imports: [ ReactiveFormsModule, RouterLink, AsyncPipe ],
+  imports: [ReactiveFormsModule, RouterLink, AsyncPipe],
   templateUrl: './category-list.html',
   styleUrl: './category-list.css',
 })
-export class CategoryList {
+export default class CategoryList {
   private categoryService = inject(HttpCategory);
 
   // Stream de datos que alimentará la vista

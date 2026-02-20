@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { roleGuard } from '../../../core/guards/role-guard';
 
 export const DASHBOARD_ROUTES: Routes = [
     {
@@ -20,7 +19,9 @@ export const DASHBOARD_ROUTES: Routes = [
                 data: { roles: ['admin'] }
             }
         ],
-        canActivate: [roleGuard],
+        canActivate: [
+            () => import('../../../core/guards/role-guard').then(m => m.roleGuard)
+        ],
         data: { roles: ['admin', 'colaborator'] }
     },
     {
@@ -39,7 +40,9 @@ export const DASHBOARD_ROUTES: Routes = [
                 loadComponent: () => import('../users/user-edit-form/user-edit-form'),
             }
         ],
-        canActivate: [roleGuard],
+        canActivate: [
+            () => import('../../../core/guards/role-guard').then(m => m.roleGuard)
+        ],
         data: { roles: ['admin'] }
     },
     {
@@ -58,7 +61,9 @@ export const DASHBOARD_ROUTES: Routes = [
                 loadComponent: () => import('../categories/category-form/category-form'),
             }
         ],
-        canActivate: [roleGuard],
+        canActivate: [
+            () => import('../../../core/guards/role-guard').then(m => m.roleGuard)
+        ],
         data: { roles: ['admin', 'colaborator'] }
     },
 ];

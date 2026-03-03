@@ -3,14 +3,17 @@ import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 
 import { Category } from '../interfaces/category';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpCategory {
+  private apiUrl: string = environment.apiUrl;
+  private slug: string = 'categories';
+
   // Inyección de dependencias usando inject() (Best Practice Modern Angular)
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/v1/categories';
 
   /**
    * Construye los headers de la petición HTTP.
@@ -48,7 +51,7 @@ export class HttpCategory {
       });
     }
     // Petición GET con tipado de respuesta estricto
-    return this.http.get<{ categories: Category[] }>(this.apiUrl, { headers: this.getHeaders(), params: httpParams })
+    return this.http.get<{ categories: Category[] }>(`${this.apiUrl}/${this.slug}`, { headers: this.getHeaders(), params: httpParams })
       .pipe(
         // Transformamos { categories: [...] } -> [...]
         map(response => response.categories)
@@ -60,7 +63,7 @@ export class HttpCategory {
    * @param id Identificador único de la categoría
    */
   getCategoryById(id: string): Observable<Category> {
-    return this.http.get<{ category: Category }>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() })
+    return this.http.get<{ category: Category }>(`${this.apiUrl}/${this.slug}/${id}`, { headers: this.getHeaders() })
       .pipe(
         map(response => response.category)
       );
@@ -71,7 +74,7 @@ export class HttpCategory {
    * @param category Datos de la nueva categoría (Partial permite enviar solo los campos necesarios)
    */
   createCategory(category: Partial<Category>): Observable<Category> {
-    return this.http.post<Category>(this.apiUrl, category, { headers: this.getHeaders() });
+    return this.http.post<Category>(`${this.apiUrl}/${this.slug}`, category, { headers: this.getHeaders() });
   }
 
   /**
@@ -88,11 +91,11 @@ export class HttpCategory {
       'Content-Type': headers.get('Content-Type')
     });
 
-    return this.http.patch<{ category: Category }>(`${this.apiUrl}/${id}`, category, { headers })
+    return this.http.patch<{ category: Category }>(`${this.apiUrl}/${this.slug}/${id}`, category, { headers })
       .pipe(
-        tap( response => console.log('✅ PATCH Success:', response ) ),
+        tap(response => console.log('✅ PATCH Success:', response)),
         map(response => response.category),
-        catchError( error => {
+        catchError(error => {
           console.error(error);
           return of(null as any);
         })
@@ -104,6 +107,6 @@ export class HttpCategory {
    * @param id ID de la categoría a eliminar
    */
   deleteCategory(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
+    return this.http.delete(`${this.apiUrl}/${this.slug}/${id}`, { headers: this.getHeaders() });
   }
 }
